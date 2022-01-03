@@ -36,6 +36,16 @@ const findNearestDistricts = async (req: Request, res: Response) => {
           distanceField: "calcDistance",
         },
       },
+      {
+        $project: {
+          name: 1,
+          calcDistance: 1,
+          location: {
+            longitude: { $arrayElemAt: ["$location.coordinates", 0] },
+            latitude: { $arrayElemAt: ["$location.coordinates", 1] },
+          },
+        },
+      },
     ]);
 
     return res.send({ nearDistricts });
