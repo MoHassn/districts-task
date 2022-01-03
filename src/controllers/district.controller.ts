@@ -27,9 +27,16 @@ const findNearestDistricts = async (req: Request, res: Response) => {
     //     includeLocs: "dist.location",
     //   })
     //   .exec();
-    const nearDistricts = await District.find({})
-      .where("location")
-      .near({ center: [location[0], location[1]], spherical: true });
+
+    const nearDistricts = await District.aggregate([
+      {
+        $geoNear: {
+          near: { type: "Point", coordinates: [location[0], location[1]] },
+          spherical: true,
+          distanceField: "calcDistance",
+        },
+      },
+    ]);
 
     return res.send({ nearDistricts });
   } catch (e) {
