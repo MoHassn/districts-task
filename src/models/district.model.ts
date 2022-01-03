@@ -30,6 +30,7 @@ const districtSchema = new Schema({
     },
   },
 });
+districtSchema.index({ location: "2dsphere" });
 
 const District: Model<DistrictDocument> = model("District", districtSchema);
 

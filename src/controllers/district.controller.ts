@@ -14,4 +14,30 @@ const getDistricts = async (req: Request, res: Response) => {
   }
 };
 
-export { getDistricts };
+const findNearestDistricts = async (req: Request, res: Response) => {
+  const location = req.body.location as number[];
+
+  try {
+    // TO BE DISCUSSED
+
+    // const nearDistricts = District.aggregate()
+    //   .near({
+    //     near: [location[0], location[1]],
+    //     distanceField: "dist.calculated",
+    //     includeLocs: "dist.location",
+    //   })
+    //   .exec();
+    const nearDistricts = await District.find({})
+      .where("location")
+      .near({ center: [location[0], location[1]], spherical: true });
+
+    return res.send({ nearDistricts });
+  } catch (e) {
+    console.log("Error occurred while getting the near districts", e);
+    return res
+      .status(500)
+      .send({ message: "Error occurred while getting the near districts" });
+  }
+};
+
+export { getDistricts, findNearestDistricts };
