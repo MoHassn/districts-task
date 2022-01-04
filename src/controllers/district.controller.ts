@@ -16,6 +16,7 @@ const getDistricts = async (req: Request, res: Response) => {
 
 const findNearestDistricts = async (req: Request, res: Response) => {
   const location = req.body.location as number[];
+  const orderType = req.query.orderType as string;
 
   try {
     // TO BE DISCUSSED
@@ -45,6 +46,27 @@ const findNearestDistricts = async (req: Request, res: Response) => {
             latitude: { $arrayElemAt: ["$location.coordinates", 1] },
           },
         },
+      },
+      {
+        $lookup: {
+          from: "orders",
+          localField: "_id",
+          foreignField: "district",
+          pipeline: [
+            {
+              $match: {
+                type: orderType,
+              },
+            },
+            {
+              $count: "orders_count",
+            },
+          ],
+          as: "orders",
+        },
+      },
+      {
+        $addFields: { orders: { $sum: "$orders.orders_count" } },
       },
     ]);
 
