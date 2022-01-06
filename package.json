@@ -6,7 +6,7 @@
   "scripts": {
     "start-dev": "ts-node-dev ./src/index.ts",
     "build": "tsc",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'"
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts' --exit"
   },
   "keywords": [],
   "author": "",
